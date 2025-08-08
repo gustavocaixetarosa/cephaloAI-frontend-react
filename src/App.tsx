@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button } from './components/ui/button';
 import { Card } from './components/ui/card';
 import { ImageUpload } from './components/ImageUpload';
@@ -107,26 +107,26 @@ function App() {
               <div className='space-y-2 text-sm'>
                 <div className='flex items-center jusify-between'>
                   <span>Upload da imagem</span>
-                  <span className={originalImage ? textSuccess : textFailure}>
-                    {originalImage ? "✓ Concluido" : "Pendente"}
+                  <span className={originalImage ? 'text-green-600' : 'text-green-600'}>
+                    {originalImage ? "✓ Concluido" : "  Pendente"}
                   </span>
                 </div>
                 <div className='flex items-center jusify-between'>
                   <span>Detecção de pontos</span>
                   <span className={showResults ? textSuccess : textFailure}>
-                    {isAnalyzing ? "Processando..." : showResults ? "✓ Concluido" : "Pendente"}
+                    {isAnalyzing ? "Processando..." : showResults ? "✓ Concluido" : "  Pendente"}
                   </span>
                 </div>
                 <div className='flex items-center jusify-between'>
                   <span>Análise das medições</span>
                   <span className={showResults ? textSuccess : textFailure}>
-                    {originalImage ? "✓ Concluido" : "Pendente"}
+                    {originalImage ? "✓ Concluido" : "  Pendente"}
                   </span>
                 </div>
                 <div className='flex items-center jusify-between'>
                   <span>Diagnóstico da IA</span>
                   <span className={showResults ? textSuccess : textFailure}>
-                    {originalImage ? "✓ Concluido" : "Pendente"}
+                    {originalImage ? "✓ Concluido" : "  Pendente"}
                   </span>
                 </div>
               </div>
@@ -147,7 +147,6 @@ function App() {
               diagnosis={showResults ? null : null}
             />
           </div>
-          testando
         </div>
 
       </main>
