@@ -91,7 +91,7 @@ function App() {
                   )}
                 </Button>
 
-                <div className='text-xs text-muted-foreground space-y-1' A>
+                <div className='text-xs text-muted-foreground space-y-1'>
                   <p>• Carregue um raio x lateral </p>
                   <p>• Clique em "Gerar análise" para processar </p>
                   <p>• Veja os resultados e as medições </p>
@@ -145,7 +145,9 @@ function App() {
               isLoading={isAnalyzing}
               results={showResults ? null : null}
               diagnosis={showResults ? null : null}
+            />
           </div>
+          testando
         </div>
 
       </main>
