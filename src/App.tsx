@@ -36,7 +36,7 @@ function App() {
     setIsAnalyzing(false);
   };
 
-  const textSuccess = 'text-green-600';
+  const textSuccess = 'text-green-600 ';
   const textFailure = 'text-gray-400';
 
   return (
@@ -107,26 +107,26 @@ function App() {
               <div className='space-y-2 text-sm'>
                 <div className='flex items-center jusify-between'>
                   <span>Upload da imagem</span>
-                  <span className={originalImage ? 'text-green-600' : 'text-green-600'}>
-                    {originalImage ? "✓ Concluido" : "  Pendente"}
+                  <span className={originalImage ? textSuccess : textFailure}>
+                    {originalImage ? "✓ Concluido" : "Pendente"}
                   </span>
                 </div>
                 <div className='flex items-center jusify-between'>
                   <span>Detecção de pontos</span>
                   <span className={showResults ? textSuccess : textFailure}>
-                    {isAnalyzing ? "Processando..." : showResults ? "✓ Concluido" : "  Pendente"}
+                    {isAnalyzing ? "Processando..." : showResults ? "✓ Concluido" : "Pendente"}
                   </span>
                 </div>
                 <div className='flex items-center jusify-between'>
                   <span>Análise das medições</span>
                   <span className={showResults ? textSuccess : textFailure}>
-                    {originalImage ? "✓ Concluido" : "  Pendente"}
+                    {originalImage ? "✓ Concluido" : "Pendente"}
                   </span>
                 </div>
                 <div className='flex items-center jusify-between'>
                   <span>Diagnóstico da IA</span>
                   <span className={showResults ? textSuccess : textFailure}>
-                    {originalImage ? "✓ Concluido" : "  Pendente"}
+                    {originalImage ? "✓ Concluido" : "Pendente"}
                   </span>
                 </div>
               </div>
