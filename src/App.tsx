@@ -4,21 +4,32 @@ import { Card } from './components/ui/card';
 import { ImageUpload } from './components/ImageUpload';
 import { ImageDisplay } from './components/ImageDisplay';
 import { DiagnosticPanel } from './components/DiagnosticPanel';
-import { Brain, FileText, Zap } from 'lucide-react';
+import { Brain, Zap } from 'lucide-react';
 import './App.css'
+import AiDiagnosis from './components/AiDiagnosis';
+import AnalysisStatus from './components/AnalysisStatus';
 
 function App() {
   const [originalImage, setOriginalImage] = useState<string | null>(null)
   const [analyzedImage, setAnalyzedImage] = useState<string | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [showResults, setShowResults] = useState(false)
+  const [isAiDiagnosticReturned, setAiReturn] = useState(false)
 
-  const handleImageUpload = (file: File) => {
+  const handleImageUpload = async (file: File) => {
     const imageUrl = URL.createObjectURL(file)
     setOriginalImage(imageUrl);
     setAnalyzedImage(null);
     setShowResults(false);
+    //await handleCallIaAlgor(imageUrl);
   }
+
+  //const handleCallIaAlgor = async (imageUrl: string) => {
+  //TODO: Criar api em python
+  //Chama api em python que gera os pontos da Imagem
+  //await Promise<File> 
+
+  //}
 
   const handleGenerateAnalysis = async () => {
     if (!originalImage) return;;
@@ -27,17 +38,21 @@ function App() {
 
     //Chama api de analise de imagem por IA
     await new Promise(resolve => setTimeout(resolve, 3000));
-
     //Recebeu nova imagem na response da api
     //
+
+    //Chama llm para analisar os pontos entregues pelo alg de imagem
+    handleLlmCall();
+
 
     setAnalyzedImage(originalImage);
     setShowResults(true);
     setIsAnalyzing(false);
   };
 
-  const textSuccess = 'text-green-600 ';
-  const textFailure = 'text-gray-400';
+  const handleLlmCall = async () => {
+    setAiReturn(true);
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -99,43 +114,21 @@ function App() {
               </div>
             </Card>
 
-            <Card className='p-6'>
-              <div className='flex items-center gap-2 mb-3'>
-                <FileText className='w-5 h-5 text-primary' />
-                <h3>Status da análise</h3>
-              </div>
-              <div className='space-y-2 text-sm'>
-                <div className='flex items-center jusify-between'>
-                  <span>Upload da imagem</span>
-                  <span className={originalImage ? textSuccess : textFailure}>
-                    {originalImage ? "✓ Concluido" : "Pendente"}
-                  </span>
-                </div>
-                <div className='flex items-center jusify-between'>
-                  <span>Detecção de pontos</span>
-                  <span className={showResults ? textSuccess : textFailure}>
-                    {isAnalyzing ? "Processando..." : showResults ? "✓ Concluido" : "Pendente"}
-                  </span>
-                </div>
-                <div className='flex items-center jusify-between'>
-                  <span>Análise das medições</span>
-                  <span className={showResults ? textSuccess : textFailure}>
-                    {originalImage ? "✓ Concluido" : "Pendente"}
-                  </span>
-                </div>
-                <div className='flex items-center jusify-between'>
-                  <span>Diagnóstico da IA</span>
-                  <span className={showResults ? textSuccess : textFailure}>
-                    {originalImage ? "✓ Concluido" : "Pendente"}
-                  </span>
-                </div>
-              </div>
-            </Card>
+            <AiDiagnosis />
+
+
           </div>
 
 
           {/* Right column - Images and Results */}
+
           <div className='xl:col-span-2 space-y-8'>
+            <AnalysisStatus
+              isUploaded={originalImage ? true : false}
+              isPointsDetected={showResults}
+              isAnalyzed={isAnalyzing ? true : false}
+              isAiDiagnosticReturned={isAiDiagnosticReturned}
+            />
             <ImageDisplay
               originalImage={originalImage}
               analyzedImage={analyzedImage}
@@ -144,8 +137,9 @@ function App() {
             <DiagnosticPanel
               isLoading={isAnalyzing}
               results={showResults ? null : null}
-              diagnosis={showResults ? null : null}
             />
+
+
           </div>
         </div>
 

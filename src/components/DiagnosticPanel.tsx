@@ -1,33 +1,31 @@
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
-import { Separator } from './ui/separator';
 import { ScrollArea } from './ui/scroll-area';
 
 interface DiagnosticResult {
-  measurement: string;
-  value: string;
-  normalRange: string;
+  medicao: string;
+  valor: string;
+  variacaoNormal: string;
   status: 'normal' | 'abnormal' | 'borderline';
 }
 
 interface DiagnosticPanelProps {
   isLoading: boolean;
   results: DiagnosticResult[] | null;
-  diagnosis: string | null;
 }
 
 const mockResults: DiagnosticResult[] = [
-  { measurement: "SNA Angle", value: "82°", normalRange: "80-84°", status: "normal" },
-  { measurement: "SNB Angle", value: "78°", normalRange: "78-82°", status: "normal" },
-  { measurement: "ANB Angle", value: "4°", normalRange: "0-4°", status: "normal" },
-  { measurement: "Wits Appraisal", value: "1mm", normalRange: "-1 to +3mm", status: "normal" },
-  { measurement: "FMA", value: "28°", normalRange: "20-30°", status: "normal" },
-  { measurement: "IMPA", value: "95°", normalRange: "87-95°", status: "normal" },
-  { measurement: "U1-SN", value: "102°", normalRange: "100-110°", status: "normal" },
-  { measurement: "L1-MP", value: "92°", normalRange: "85-95°", status: "normal" }
+  { medicao: "Ângulo SNA ", valor: "82°", variacaoNormal: "80-84°", status: "normal" },
+  { medicao: "Ângulo SNB ", valor: "78°", variacaoNormal: "78-82°", status: "normal" },
+  { medicao: "Ângulo ANB ", valor: "4°", variacaoNormal: "0-4°", status: "normal" },
+  { medicao: "Wits Appraisal", valor: "1mm", variacaoNormal: "-1 to +3mm", status: "normal" },
+  { medicao: "FMA", valor: "28°", variacaoNormal: "20-30°", status: "normal" },
+  { medicao: "IMPA", valor: "95°", variacaoNormal: "87-95°", status: "normal" },
+  { medicao: "U1-SN", valor: "102°", variacaoNormal: "100-110°", status: "normal" },
+  { medicao: "L1-MP", valor: "92°", variacaoNormal: "85-95°", status: "normal" }
 ];
 
-export function DiagnosticPanel({ isLoading, results, diagnosis }: DiagnosticPanelProps) {
+export function DiagnosticPanel({ isLoading, results }: DiagnosticPanelProps) {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'normal': return 'bg-green-100 text-green-800 border-green-200';
@@ -54,7 +52,6 @@ export function DiagnosticPanel({ isLoading, results, diagnosis }: DiagnosticPan
   }
 
   const displayResults = results || mockResults;
-  const displayDiagnosis = diagnosis || "Based on the cephalometric analysis, the patient presents with a Class I skeletal relationship with normal facial proportions. All angular measurements fall within normal limits, indicating balanced craniofacial growth and development.";
 
   return (
     <Card className="p-6">
@@ -62,14 +59,14 @@ export function DiagnosticPanel({ isLoading, results, diagnosis }: DiagnosticPan
 
       <ScrollArea className="h-[400px] pr-4">
         <div className="space-y-6">
-          {/* Measurements */}
+          {/* medicaos */}
           <div>
-            <h4 className="mb-3">Cephalometric Measurements</h4>
+            <h4 className="mb-3">Medições cefalométricas</h4>
             <div className="space-y-3">
               {displayResults.map((result, index) => (
                 <div key={index} className="border rounded-lg p-3">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-medium">{result.measurement}</span>
+                    <span className="text-sm font-medium">{result.medicao}</span>
                     <Badge
                       variant="outline"
                       className={getStatusColor(result.status)}
@@ -79,40 +76,17 @@ export function DiagnosticPanel({ isLoading, results, diagnosis }: DiagnosticPan
                   </div>
                   <div className="grid grid-cols-2 gap-2 text-sm text-muted-foreground">
                     <div>
-                      <span className="font-medium">Measured: </span>
-                      <span>{result.value}</span>
+                      <span className="font-medium">Medido: </span>
+                      <span>{result.valor}</span>
                     </div>
                     <div>
                       <span className="font-medium">Normal: </span>
-                      <span>{result.normalRange}</span>
+                      <span>{result.variacaoNormal}</span>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-          </div>
-
-          <Separator />
-
-          {/* AI Diagnosis */}
-          <div>
-            <h4 className="mb-3">AI Diagnostic Summary</h4>
-            <Card className="p-4 bg-muted/50">
-              <p className="text-sm leading-relaxed">
-                {displayDiagnosis}
-              </p>
-            </Card>
-          </div>
-
-          {/* Recommendations */}
-          <div>
-            <h4 className="mb-3">Clinical Recommendations</h4>
-            <ul className="text-sm space-y-2 text-muted-foreground">
-              <li>• Continue regular orthodontic monitoring</li>
-              <li>• Consider growth assessment at 6-month intervals</li>
-              <li>• Monitor for any changes in facial asymmetry</li>
-              <li>• Evaluate occlusal relationships clinically</li>
-            </ul>
           </div>
         </div>
       </ScrollArea>
