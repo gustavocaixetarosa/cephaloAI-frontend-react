@@ -8,32 +8,51 @@ import { Brain, FileText, Zap } from 'lucide-react';
 import './App.css'
 
 function App() {
-  const [originalImage, setOriginalImage] = useState<string | null>(null)
+  const [originalImage, setOriginalImage] = useState<File | null>(null)
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [analyzedImage, setAnalyzedImage] = useState<string | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [showResults, setShowResults] = useState(false)
 
   const handleImageUpload = (file: File) => {
-    const imageUrl = URL.createObjectURL(file)
-    setOriginalImage(imageUrl);
+    setOriginalImage(file); // salva o File para enviar
+    setPreviewUrl(URL.createObjectURL(file)); // salva a URL só para exibir
     setAnalyzedImage(null);
     setShowResults(false);
-  }
+  };
 
   const handleGenerateAnalysis = async () => {
-    if (!originalImage) return;;
+    if (!originalImage) return;
 
     setIsAnalyzing(true);
 
-    //Chama api de analise de imagem por IA
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    console.log(originalImage)
+    try {
+      const formData = new FormData();
+      formData.append("file", originalImage); // originalImage deve ser um File (ex: input type="file")
 
-    //Recebeu nova imagem na response da api
-    //
+      console.log("Tentando chamar api")
+      const response = await fetch("http://127.0.0.1:5000/processar-imagem", {
+        method: "POST",
+        body: formData,
+      });
 
-    setAnalyzedImage(originalImage);
-    setShowResults(true);
-    setIsAnalyzing(false);
+      if (!response.ok) {
+        throw new Error("Erro na API");
+      }
+
+      const data = await response.json();
+      console.log("Coordenadas recebidas:", data.coords);
+
+      // Se quiser exibir imagem processada, vai precisar que o Flask retorne ela também
+      setAnalyzedImage(originalImage); 
+      setShowResults(true);
+
+    } catch (error) {
+      console.error("Erro:", error);
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   const textSuccess = 'text-green-600 ';
@@ -137,7 +156,7 @@ function App() {
           {/* Right column - Images and Results */}
           <div className='xl:col-span-2 space-y-8'>
             <ImageDisplay
-              originalImage={originalImage}
+              originalImage={previewUrl}
               analyzedImage={analyzedImage}
             />
 
