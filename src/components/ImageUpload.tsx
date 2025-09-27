@@ -5,7 +5,7 @@ import { Upload, Image as ImageIcon } from 'lucide-react';
 
 interface ImageUploadProps {
   onImageUpload: (file: File) => void;
-  uploadedImage: string | null;
+  uploadedImage: File | null;
 }
 
 export function ImageUpload({ onImageUpload, uploadedImage }: ImageUploadProps) {

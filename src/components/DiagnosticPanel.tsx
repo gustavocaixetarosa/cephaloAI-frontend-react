@@ -17,10 +17,10 @@ interface DiagnosticPanelProps {
 }
 
 const mockResults: DiagnosticResult[] = [
-  { measurement: "SNA Angle", value: "82°", normalRange: "80-84°", status: "normal" },
-  { measurement: "SNB Angle", value: "78°", normalRange: "78-82°", status: "normal" },
-  { measurement: "ANB Angle", value: "4°", normalRange: "0-4°", status: "normal" },
-  { measurement: "Wits Appraisal", value: "1mm", normalRange: "-1 to +3mm", status: "normal" },
+  { measurement: "Ângulo SNA", value: "82°", normalRange: "80-84°", status: "normal" },
+  { measurement: "Ângulo SNB", value: "78°", normalRange: "78-82°", status: "normal" },
+  { measurement: "Ângulo ANB", value: "4°", normalRange: "0-4°", status: "normal" },
+  { measurement: "Avaliação de Wits", value: "1mm", normalRange: "-1 to +3mm", status: "normal" },
   { measurement: "FMA", value: "28°", normalRange: "20-30°", status: "normal" },
   { measurement: "IMPA", value: "95°", normalRange: "87-95°", status: "normal" },
   { measurement: "U1-SN", value: "102°", normalRange: "100-110°", status: "normal" },
@@ -40,7 +40,7 @@ export function DiagnosticPanel({ isLoading, results, diagnosis }: DiagnosticPan
   if (isLoading) {
     return (
       <Card className="p-6">
-        <h3 className="mb-4">AI Analysis Results</h3>
+        <h3 className="mb-4">Resultados da análise</h3>
         <div className="space-y-4">
           {[...Array(6)].map((_, i) => (
             <div key={i} className="animate-pulse">
@@ -54,17 +54,17 @@ export function DiagnosticPanel({ isLoading, results, diagnosis }: DiagnosticPan
   }
 
   const displayResults = results || mockResults;
-  const displayDiagnosis = diagnosis || "Based on the cephalometric analysis, the patient presents with a Class I skeletal relationship with normal facial proportions. All angular measurements fall within normal limits, indicating balanced craniofacial growth and development.";
+  const displayDiagnosis = diagnosis || "Com base na análise cefalométrica, o paciente apresenta uma relação esquelética de Classe I com proporções faciais normais. Todas as medidas angulares estão dentro dos limites normais, indicando crescimento e desenvolvimento craniofacial equilibrados.";
 
   return (
     <Card className="p-6">
-      <h3 className="mb-4">AI Analysis Results</h3>
+      <h3 className="mb-4">Resultados da análise</h3>
 
       <ScrollArea className="h-[400px] pr-4">
         <div className="space-y-6">
           {/* Measurements */}
           <div>
-            <h4 className="mb-3">Cephalometric Measurements</h4>
+            <h4 className="mb-3">Medidas cefalométricas</h4>
             <div className="space-y-3">
               {displayResults.map((result, index) => (
                 <div key={index} className="border rounded-lg p-3">
@@ -79,7 +79,7 @@ export function DiagnosticPanel({ isLoading, results, diagnosis }: DiagnosticPan
                   </div>
                   <div className="grid grid-cols-2 gap-2 text-sm text-muted-foreground">
                     <div>
-                      <span className="font-medium">Measured: </span>
+                      <span className="font-medium">Medida: </span>
                       <span>{result.value}</span>
                     </div>
                     <div>
@@ -96,7 +96,7 @@ export function DiagnosticPanel({ isLoading, results, diagnosis }: DiagnosticPan
 
           {/* AI Diagnosis */}
           <div>
-            <h4 className="mb-3">AI Diagnostic Summary</h4>
+            <h4 className="mb-3">Sumário do diagnóstico</h4>
             <Card className="p-4 bg-muted/50">
               <p className="text-sm leading-relaxed">
                 {displayDiagnosis}
@@ -106,12 +106,12 @@ export function DiagnosticPanel({ isLoading, results, diagnosis }: DiagnosticPan
 
           {/* Recommendations */}
           <div>
-            <h4 className="mb-3">Clinical Recommendations</h4>
+            <h4 className="mb-3">Recomendações clínicas</h4>
             <ul className="text-sm space-y-2 text-muted-foreground">
-              <li>• Continue regular orthodontic monitoring</li>
-              <li>• Consider growth assessment at 6-month intervals</li>
-              <li>• Monitor for any changes in facial asymmetry</li>
-              <li>• Evaluate occlusal relationships clinically</li>
+              <li>• Continuar com consultas regulares</li>
+              <li>• Considerar avaliações semestrais para acompanhar crescimento</li>
+              <li>• Monitorar quaisquer alterações em simetria facial.</li>
+              <li>• Avaliar relações de oclusões clinicamente.</li>
             </ul>
           </div>
         </div>

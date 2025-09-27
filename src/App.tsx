@@ -7,12 +7,17 @@ import { DiagnosticPanel } from './components/DiagnosticPanel';
 import { Brain, FileText, Zap } from 'lucide-react';
 import './App.css'
 
+interface angle {
+  
+}
+
 function App() {
   const [originalImage, setOriginalImage] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [analyzedImage, setAnalyzedImage] = useState<string | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [showResults, setShowResults] = useState(false)
+  const [angles, setAngles] = useState<angle[] | null>(null)
 
   const handleImageUpload = (file: File) => {
     setOriginalImage(file); // salva o File para enviar
@@ -40,9 +45,8 @@ function App() {
       }
 
       const data = await response.json();
-      console.log("Coordenadas recebidas:", data.coords);
+      console.log("Resposta do backend:", data);
 
-      // Pega só o nome do arquivo do path retornado
       const filename = data.image_with_overlay_path.replace(/^.*[\\/]/, "");
       const imageUrl = `http://127.0.0.1:5000/download-imagem/${filename}`;
       setAnalyzedImage(imageUrl);
@@ -63,11 +67,8 @@ function App() {
       <header>
         <div className='border-b bg-card'>
           <div className='flex items-center gap-3'>
-            <div className='p-2 rounded-lg bg-primary text-primary-foreground'>
-              <Brain className='w-6 h-6' />
-            </div>
             <div>
-              <h1 className='text-2x1 font-medium'>CephaloAI</h1>
+              <h1 className='text-3x1 font-bold'>CephaloAI</h1>
               <p className='text-sm text-muted-foreground'>
                 Análise automatizadas de cefalogramas
               </p>
