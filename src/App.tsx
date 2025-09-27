@@ -26,12 +26,10 @@ function App() {
 
     setIsAnalyzing(true);
 
-    console.log(originalImage)
     try {
       const formData = new FormData();
-      formData.append("file", originalImage); // originalImage deve ser um File (ex: input type="file")
+      formData.append("file", originalImage);
 
-      console.log("Tentando chamar api")
       const response = await fetch("http://127.0.0.1:5000/processar-imagem", {
         method: "POST",
         body: formData,
@@ -44,8 +42,10 @@ function App() {
       const data = await response.json();
       console.log("Coordenadas recebidas:", data.coords);
 
-      // Se quiser exibir imagem processada, vai precisar que o Flask retorne ela também
-      setAnalyzedImage(originalImage); 
+      // Pega só o nome do arquivo do path retornado
+      const filename = data.image_with_overlay_path.replace(/^.*[\\/]/, "");
+      const imageUrl = `http://127.0.0.1:5000/download-imagem/${filename}`;
+      setAnalyzedImage(imageUrl);
       setShowResults(true);
 
     } catch (error) {
