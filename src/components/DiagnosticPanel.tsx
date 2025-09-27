@@ -2,6 +2,7 @@ import { Card } from './ui/card';
 import { Badge } from './ui/badge';
 import { Separator } from './ui/separator';
 import { ScrollArea } from './ui/scroll-area';
+import type { Angles } from '../App';
 
 interface DiagnosticResult {
   measurement: string;
@@ -11,28 +12,18 @@ interface DiagnosticResult {
 }
 
 interface DiagnosticPanelProps {
+  angles: Angles | null;
   isLoading: boolean;
   results: DiagnosticResult[] | null;
   diagnosis: string | null;
 }
 
-const mockResults: DiagnosticResult[] = [
-  { measurement: "Ângulo SNA", value: "82°", normalRange: "80-84°", status: "normal" },
-  { measurement: "Ângulo SNB", value: "78°", normalRange: "78-82°", status: "normal" },
-  { measurement: "Ângulo ANB", value: "4°", normalRange: "0-4°", status: "normal" },
-  { measurement: "Avaliação de Wits", value: "1mm", normalRange: "-1 to +3mm", status: "normal" },
-  { measurement: "FMA", value: "28°", normalRange: "20-30°", status: "normal" },
-  { measurement: "IMPA", value: "95°", normalRange: "87-95°", status: "normal" },
-  { measurement: "U1-SN", value: "102°", normalRange: "100-110°", status: "normal" },
-  { measurement: "L1-MP", value: "92°", normalRange: "85-95°", status: "normal" }
-];
-
-export function DiagnosticPanel({ isLoading, results, diagnosis }: DiagnosticPanelProps) {
+export function DiagnosticPanel({ isLoading, results, diagnosis, angles }: DiagnosticPanelProps) {
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'normal': return 'bg-green-100 text-green-800 border-green-200';
-      case 'abnormal': return 'bg-red-100 text-red-800 border-red-200';
-      case 'borderline': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case '1': return 'bg-green-100 text-green-800 border-green-200';      // normal
+      case '2': return 'bg-yellow-100 text-yellow-800 border-yellow-200';   // ruim
+      case '3': return 'bg-red-100 text-red-800 border-red-200';            // péssimo
       default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
@@ -53,7 +44,28 @@ export function DiagnosticPanel({ isLoading, results, diagnosis }: DiagnosticPan
     );
   }
 
-  const displayResults = results || mockResults;
+  // Exemplo de ranges normais para exibição (ajuste conforme necessário)
+  const normalRanges: Record<string, string> = {
+    ANB: "2° – 4°",
+    APDI: "81° – 87°",
+    FHI: "0.65 – 0.75",
+    FMA: "22° – 28°",
+    MW: "25 – 30 mm",
+    ODI: "72° – 88°",
+    SNA: "82° ± 2°",
+    SNB: "80° ± 2°",
+  };
+
+  // Transforma angles em array para mapear
+  const displayResults = angles
+    ? Object.entries(angles).map(([key, angle]) => ({
+        measurement: key,
+        value: angle.value.toFixed(2),
+        normalRange: normalRanges[key] || "-",
+        status: angle.class, // já vem como '1', '2' ou '3'
+      }))
+    : [];
+
   const displayDiagnosis = diagnosis || "Com base na análise cefalométrica, o paciente apresenta uma relação esquelética de Classe I com proporções faciais normais. Todas as medidas angulares estão dentro dos limites normais, indicando crescimento e desenvolvimento craniofacial equilibrados.";
 
   return (
@@ -74,7 +86,13 @@ export function DiagnosticPanel({ isLoading, results, diagnosis }: DiagnosticPan
                       variant="outline"
                       className={getStatusColor(result.status)}
                     >
-                      {result.status}
+                      {result.status === '1'
+                        ? 'Normal'
+                        : result.status === '2'
+                        ? 'Ruim'
+                        : result.status === '3'
+                        ? 'Crítico'
+                        : 'Desconhecido'}
                     </Badge>
                   </div>
                   <div className="grid grid-cols-2 gap-2 text-sm text-muted-foreground">

@@ -7,8 +7,22 @@ import { DiagnosticPanel } from './components/DiagnosticPanel';
 import { Brain, FileText, Zap } from 'lucide-react';
 import './App.css'
 
-interface angle {
-  
+// Interface para cada ângulo
+interface AngleValue {
+  class: string;
+  value: number;
+}
+
+// Interface para o objeto angles retornado pelo backend
+export interface Angles {
+  ANB: AngleValue;
+  APDI: AngleValue;
+  FHI: AngleValue;
+  FMA: AngleValue;
+  MW: AngleValue;
+  ODI: AngleValue;
+  SNA: AngleValue;
+  SNB: AngleValue;
 }
 
 function App() {
@@ -17,7 +31,8 @@ function App() {
   const [analyzedImage, setAnalyzedImage] = useState<string | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [showResults, setShowResults] = useState(false)
-  const [angles, setAngles] = useState<angle[] | null>(null)
+  const [angles, setAngles] = useState<Angles | null>(null);
+  const [diagnosis, setDiagnosis] = useState<string | null>(null);
 
   const handleImageUpload = (file: File) => {
     setOriginalImage(file); // salva o File para enviar
@@ -51,6 +66,7 @@ function App() {
       const imageUrl = `http://127.0.0.1:5000/download-imagem/${filename}`;
       setAnalyzedImage(imageUrl);
       setShowResults(true);
+      setAngles(data.angles); // agora angles será do tipo Angles
 
     } catch (error) {
       console.error("Erro:", error);
@@ -125,28 +141,28 @@ function App() {
                 <h3>Status da análise</h3>
               </div>
               <div className='space-y-2 text-sm'>
-                <div className='flex items-center jusify-between'>
+                <div className='flex items-center justify-between'>
                   <span>Upload da imagem</span>
                   <span className={originalImage ? textSuccess : textFailure}>
                     {originalImage ? "✓ Concluido" : "Pendente"}
                   </span>
                 </div>
-                <div className='flex items-center jusify-between'>
+                <div className='flex items-center justify-between'>
                   <span>Detecção de pontos</span>
                   <span className={showResults ? textSuccess : textFailure}>
                     {isAnalyzing ? "Processando..." : showResults ? "✓ Concluido" : "Pendente"}
                   </span>
                 </div>
-                <div className='flex items-center jusify-between'>
+                <div className='flex items-center justify-between'>
                   <span>Análise das medições</span>
-                  <span className={showResults ? textSuccess : textFailure}>
-                    {originalImage ? "✓ Concluido" : "Pendente"}
+                  <span className={angles ? textSuccess : textFailure}>
+                    {angles ? "✓ Concluido" : "Pendente"}
                   </span>
                 </div>
-                <div className='flex items-center jusify-between'>
+                <div className='flex items-center justify-between'>
                   <span>Diagnóstico da IA</span>
-                  <span className={showResults ? textSuccess : textFailure}>
-                    {originalImage ? "✓ Concluido" : "Pendente"}
+                  <span className={diagnosis ? textSuccess : textFailure}>
+                    {diagnosis ? "✓ Concluido" : "Pendente"}
                   </span>
                 </div>
               </div>
@@ -161,11 +177,15 @@ function App() {
               analyzedImage={analyzedImage}
             />
 
-            <DiagnosticPanel
-              isLoading={isAnalyzing}
-              results={showResults ? null : null}
-              diagnosis={showResults ? null : null}
-            />
+            {/* Só mostra o painel se showResults for true e angles não for null */}
+            {showResults && angles && (
+              <DiagnosticPanel
+                angles={angles}
+                isLoading={isAnalyzing}
+                results={null}
+                diagnosis={null}
+              />
+            )}
           </div>
         </div>
 
