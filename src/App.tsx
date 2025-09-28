@@ -7,13 +7,11 @@ import { DiagnosticPanel } from './components/DiagnosticPanel';
 import { Brain, FileText, Zap } from 'lucide-react';
 import './App.css'
 
-// Interface para cada ângulo
 interface AngleValue {
   class: string;
   value: number;
 }
 
-// Interface para o objeto angles retornado pelo backend
 export interface Angles {
   ANB: AngleValue;
   APDI: AngleValue;
