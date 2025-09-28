@@ -33,6 +33,7 @@ function App() {
   const [showResults, setShowResults] = useState(false)
   const [angles, setAngles] = useState<Angles | null>(null);
   const [diagnosis, setDiagnosis] = useState<string | null>(null);
+  const [recommendations, setRecommendations] = useState<string[] | null>(null);
 
   const handleImageUpload = (file: File) => {
     setOriginalImage(file); // salva o File para enviar
@@ -66,7 +67,8 @@ function App() {
       const imageUrl = `http://127.0.0.1:5000/download-imagem/${filename}`;
       setAnalyzedImage(imageUrl);
       setShowResults(true);
-      setAngles(data.angles); // agora angles será do tipo Angles
+      setAngles(data.angles);
+      handleSendAnglesToAi(data);
 
     } catch (error) {
       console.error("Erro:", error);
@@ -74,6 +76,26 @@ function App() {
       setIsAnalyzing(false);
     }
   };
+
+  const handleSendAnglesToAi = async (angles: any) => {
+    if (!angles) {
+      console.log("Error sending angles to ai. Angles might be null.");
+      return;
+    }
+
+    const response = await fetch("http://localhost:3001/diagnostico", {
+      method: "POST",
+      body: angles,
+    });
+
+    if (!response.ok) {
+      throw new Error("Erro na api de diagnostico");
+    }
+
+    const data = await response.json();
+    setDiagnosis(data.diagnostico);
+    setRecommendations(data.recomendacoes);
+  }
 
   const textSuccess = 'text-green-600 ';
   const textFailure = 'text-gray-400';
