@@ -59,14 +59,14 @@ function App() {
       }
 
       const data = await response.json();
-      console.log("Resposta do backend:", data);
 
       const filename = data.image_with_overlay_path.replace(/^.*[\\/]/, "");
       const imageUrl = `http://127.0.0.1:5000/download-imagem/${filename}`;
       setAnalyzedImage(imageUrl);
       setShowResults(true);
       setAngles(data.angles);
-      handleSendAnglesToAi(data);
+      console.log("Chamando diagnosis");
+      handleSendAnglesToAi(data.angles);
 
     } catch (error) {
       console.error("Erro:", error);
@@ -80,11 +80,18 @@ function App() {
       console.log("Error sending angles to ai. Angles might be null.");
       return;
     }
+    console.log("Angulos: " + angles);
+    console.log("Antes de chamar api de diagnostico");
 
+    console.log("Enviando: ", JSON.stringify(angles, null, 2));
     const response = await fetch("http://localhost:3001/diagnostico", {
       method: "POST",
-      body: angles,
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(angles),
     });
+    console.log("Chamou api de diagnostico");
 
     if (!response.ok) {
       throw new Error("Erro na api de diagnostico");
@@ -92,6 +99,8 @@ function App() {
 
     const data = await response.json();
     setDiagnosis(data.diagnostico);
+    console.log("Diagnostico: ", data.diagnostico);
+    console.log("Recomendacoes: " + data.recomendacoes);
     setRecommendations(data.recomendacoes);
   }
 
@@ -197,13 +206,12 @@ function App() {
               analyzedImage={analyzedImage}
             />
 
-            {/* Só mostra o painel se showResults for true e angles não for null */}
-            {showResults && angles && (
+            {showResults && recommendations && (
               <DiagnosticPanel
                 angles={angles}
                 isLoading={isAnalyzing}
-                results={null}
-                diagnosis={null}
+                recommendations={recommendations}
+                diagnosis={diagnosis}
               />
             )}
           </div>

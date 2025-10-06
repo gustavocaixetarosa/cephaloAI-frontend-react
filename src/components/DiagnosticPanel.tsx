@@ -14,8 +14,8 @@ interface DiagnosticResult {
 interface DiagnosticPanelProps {
   angles: Angles | null;
   isLoading: boolean;
-  results: DiagnosticResult[] | null;
   diagnosis: string | null;
+  recommendations: string | null;
 }
 
 export function DiagnosticPanel({ isLoading, results, diagnosis, angles }: DiagnosticPanelProps) {
@@ -59,11 +59,11 @@ export function DiagnosticPanel({ isLoading, results, diagnosis, angles }: Diagn
   // Transforma angles em array para mapear
   const displayResults = angles
     ? Object.entries(angles).map(([key, angle]) => ({
-        measurement: key,
-        value: angle.value.toFixed(2),
-        normalRange: normalRanges[key] || "-",
-        status: angle.class, // já vem como '1', '2' ou '3'
-      }))
+      measurement: key,
+      value: angle.value.toFixed(2),
+      normalRange: normalRanges[key] || "-",
+      status: angle.class, // já vem como '1', '2' ou '3'
+    }))
     : [];
 
   const displayDiagnosis = diagnosis || "Com base na análise cefalométrica, o paciente apresenta uma relação esquelética de Classe I com proporções faciais normais. Todas as medidas angulares estão dentro dos limites normais, indicando crescimento e desenvolvimento craniofacial equilibrados.";
@@ -89,10 +89,10 @@ export function DiagnosticPanel({ isLoading, results, diagnosis, angles }: Diagn
                       {result.status === '1'
                         ? 'Normal'
                         : result.status === '2'
-                        ? 'Ruim'
-                        : result.status === '3'
-                        ? 'Crítico'
-                        : 'Desconhecido'}
+                          ? 'Ruim'
+                          : result.status === '3'
+                            ? 'Crítico'
+                            : 'Desconhecido'}
                     </Badge>
                   </div>
                   <div className="grid grid-cols-2 gap-2 text-sm text-muted-foreground">
