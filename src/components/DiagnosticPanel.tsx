@@ -18,7 +18,7 @@ interface DiagnosticPanelProps {
   recommendations: string | null;
 }
 
-export function DiagnosticPanel({ isLoading, results, diagnosis, angles }: DiagnosticPanelProps) {
+export function DiagnosticPanel({ isLoading, recommendations, diagnosis, angles }: DiagnosticPanelProps) {
   const getStatusColor = (status: string) => {
     switch (status) {
       case '1': return 'bg-green-100 text-green-800 border-green-200';      // normal
@@ -126,10 +126,18 @@ export function DiagnosticPanel({ isLoading, results, diagnosis, angles }: Diagn
           <div>
             <h4 className="mb-3">Recomendações clínicas</h4>
             <ul className="text-sm space-y-2 text-muted-foreground">
-              <li>• Continuar com consultas regulares</li>
-              <li>• Considerar avaliações semestrais para acompanhar crescimento</li>
-              <li>• Monitorar quaisquer alterações em simetria facial.</li>
-              <li>• Avaliar relações de oclusões clinicamente.</li>
+              {Array.isArray(recommendations) && recommendations.length > 0 ? (
+                recommendations.map((rec, idx) => (
+                  <li key={idx}>• {rec}</li>
+                ))
+              ) : (
+                <>
+                  <li>• Continuar com consultas regulares</li>
+                  <li>• Considerar avaliações semestrais para acompanhar crescimento</li>
+                  <li>• Monitorar quaisquer alterações em simetria facial.</li>
+                  <li>• Avaliar relações de oclusões clinicamente.</li>
+                </>
+              )}
             </ul>
           </div>
         </div>
