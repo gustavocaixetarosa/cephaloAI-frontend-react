@@ -40,6 +40,8 @@ function App() {
     setShowResults(false);
   };
 
+  const API_PREFIX = "/api";
+
   const handleGenerateAnalysis = async () => {
     if (!originalImage) return;
 
@@ -49,7 +51,7 @@ function App() {
       const formData = new FormData();
       formData.append("file", originalImage);
 
-      const response = await fetch("http://127.0.0.1:5000/processar-imagem", {
+      const response = await fetch(`${API_PREFIX}/processar-imagem`, {
         method: "POST",
         body: formData,
       });
@@ -61,7 +63,7 @@ function App() {
       const data = await response.json();
 
       const filename = data.image_with_overlay_path.replace(/^.*[\\/]/, "");
-      const imageUrl = `http://127.0.0.1:5000/download-imagem/${filename}`;
+      const imageUrl = `${API_PREFIX}/download-imagem/${filename}`;
       setAnalyzedImage(imageUrl);
       setShowResults(true);
       setAngles(data.angles);
