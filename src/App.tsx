@@ -86,7 +86,7 @@ function App() {
     console.log("Antes de chamar api de diagnostico");
 
     console.log("Enviando: ", JSON.stringify(angles, null, 2));
-    const response = await fetch("http://localhost:3001/diagnostico", {
+    const response = await fetch("/diagnosis", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
