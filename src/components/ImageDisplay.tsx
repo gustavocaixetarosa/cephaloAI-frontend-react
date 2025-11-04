@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card } from './ui/card';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 
@@ -9,13 +8,14 @@ interface ImageDisplayProps {
 
 export function ImageDisplay({ originalImage, analyzedImage }: ImageDisplayProps) {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[500px]">
+    // tornar a altura responsiva: evitar forçar 500px em telas pequenas
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:h-[500px] h-auto">
       {/* Original Image */}
       <Card className="p-4 bg-black">
         <div className="mb-3">
           <h3 className="text-white">Imagem original</h3>
         </div>
-        <div className="h-full bg-black rounded border border-gray-700 flex items-center justify-center relative">
+  <div className="h-full min-h-0 bg-black rounded border border-gray-700 flex items-center justify-center relative">
           {originalImage ? (
             <ImageWithFallback
               src={originalImage}
@@ -40,7 +40,7 @@ export function ImageDisplay({ originalImage, analyzedImage }: ImageDisplayProps
         <div className="mb-3">
           <h3 className="text-white">Imagem resultante</h3>
         </div>
-        <div className="h-full bg-black rounded border border-gray-700 flex items-center justify-center relative">
+  <div className="h-full min-h-0 bg-black rounded border border-gray-700 flex items-center justify-center relative">
           {analyzedImage ? (
             <ImageWithFallback
               src={analyzedImage}

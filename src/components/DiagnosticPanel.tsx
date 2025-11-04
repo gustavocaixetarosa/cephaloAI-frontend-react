@@ -15,7 +15,8 @@ interface DiagnosticPanelProps {
   angles: Angles | null;
   isLoading: boolean;
   diagnosis: string | null;
-  recommendations: string | null;
+  // deve ser um array de strings ou null (coerente com App.tsx)
+  recommendations: string[] | null;
 }
 
 export function DiagnosticPanel({ isLoading, recommendations, diagnosis, angles }: DiagnosticPanelProps) {
@@ -72,7 +73,8 @@ export function DiagnosticPanel({ isLoading, recommendations, diagnosis, angles 
     <Card className="p-6">
       <h3 className="mb-4">Resultados da análise</h3>
 
-      <ScrollArea className="h-[400px] pr-4">
+      {/* altura responsiva: permitir rolagem interna e limitar por viewport para evitar sobreposição em telas pequenas */}
+      <ScrollArea className="h-auto max-h-[50vh] lg:h-[400px] pr-4">
         <div className="space-y-6">
           {/* Measurements */}
           <div>
