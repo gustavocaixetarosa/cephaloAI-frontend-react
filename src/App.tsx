@@ -202,7 +202,8 @@ function App() {
 
 
           {/* Right column - Images and Results */}
-          <div className='xl:col-span-2 space-y-8'>
+          {/* min-h-0 permite que filhos com h-full/min-height encolham corretamente em layouts flex/grid */}
+          <div className='xl:col-span-2 space-y-8 min-h-0'>
             <ImageDisplay
               originalImage={previewUrl}
               analyzedImage={analyzedImage}

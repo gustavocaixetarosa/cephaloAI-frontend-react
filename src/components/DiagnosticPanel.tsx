@@ -73,8 +73,9 @@ export function DiagnosticPanel({ isLoading, recommendations, diagnosis, angles 
     <Card className="p-6">
       <h3 className="mb-4">Resultados da análise</h3>
 
-      {/* altura responsiva: permitir rolagem interna e limitar por viewport para evitar sobreposição em telas pequenas */}
-      <ScrollArea className="h-auto max-h-[50vh] lg:h-[400px] pr-4">
+    {/* Em mobile permitimos que o painel cresça com o conteúdo (sem max-h) para ficar consistente
+     com os Cards de imagem; em telas grandes alinhamos com a altura das imagens (lg:h-[500px]) */}
+    <ScrollArea className="h-auto lg:h-[500px] pr-4">
         <div className="space-y-6">
           {/* Measurements */}
           <div>
